@@ -75,6 +75,7 @@ git add changes into stage then commit into master
 #### 撤销修改
 
 ```bash
+#drop changes in work directory
 $git checkout -- file     
 #drop the update in working directory
 	#if the update has not been put into stage, then it will withdraw to the respository version.
@@ -83,6 +84,24 @@ $git checkout -- file
 ```
 
 ```bash
-$git reset HEAD 
+#drop changes in stage
+$git reset HEAD file        #withdraw changes in stage to work directory
+$git checkout -- file
 ```
+
+
+
+```bash
+git 最新更新
+从暂存区恢复工作区，
+git resotre --worktree readme.txt
+
+从 master 恢复暂存区 
+git restore --staged readme.txt
+
+从 master 同时恢复工作区和暂存区
+git restore --source=HEAD --staged --worktree readme.txt
+```
+
+
 
