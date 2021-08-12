@@ -28,6 +28,31 @@ $git status     #get git status
 
 $git diff      #we can get its use by its name
 
+$ git status
+On branch master
+nothing to commit, working tree clean
 
 ```
+
+```bash
+$git log (--pretty oneline)           #show the log   ()option,make the log all in one line
+55df8c1bc0335753227b47ea00b07d4590cd5a1e create and write a note about git     #55dfbalabala  is commit id
+
+$git reset --hard HEAD^           #back to the last version
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
