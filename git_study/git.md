@@ -105,3 +105,10 @@ git restore --source=HEAD --staged --worktree readme.txt
 
 
 
+#### Delete file
+
+```
+delete file in 
+```
+
+https://www.liaoxuefeng.com/wiki/896043488029600/900002180232448
