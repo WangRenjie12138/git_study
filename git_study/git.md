@@ -182,15 +182,34 @@ git clone git@github.com:WangRenjie12138/git_study.git
 
 本质上分支就是不同的指针
 
-```
+```bash
 #创建分支   -b表示创建并切换
 git checkout -b dev
 
 #git branch查看分支
 git branch
 
-#
+#switch to branch "master"
+git checkout master
 
+#将dev分支的工作成果合并到master分支   Fast-forward表示为快进模式（直接把master指针指向dev的此次提交
+git merge dev
+Updating f5cea15..5aed381
+Fast-forward
+ git_study/git.md | 85 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 83 insertions(+), 2 deletions(-)
+
+#删除dev
+git branch -d dev
 ```
 
-笑死，这不就冲突了吗
+```bash
+#新版git命令
+查看分支  git branch
+创建分支  git branch <name>
+切换分支  git switch <name>
+创建+切换 git switch -c <name>
+合并某分支到当前分支 git merge <name>
+删除分支  git branch -d <name>
+```
+
