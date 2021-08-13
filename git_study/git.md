@@ -107,8 +107,89 @@ git restore --source=HEAD --staged --worktree readme.txt
 
 #### Delete file
 
-```
-delete file in 
+```bash
+#delete file in respository
+git rm file
+git commit -m "delete file"
+
+git rm file
+git resotre 
 ```
 
-https://www.liaoxuefeng.com/wiki/896043488029600/900002180232448
+
+
+
+
+### 远程仓库
+
+```bash
+$ssh-keygen -t rsa -C "857638220@qq.com"
+```
+
+创建完成后可以在用户主目录   /user/windows10/.ssh看到id_rsa和id_rsa.pub两个文件
+
+前者是私钥，后者是公钥。
+
+
+
+配置GitHub
+
+在设置中add SSH Key，粘贴id_rsa.pub文件
+
+为了确认是本人推送的分支。
+
+#### 添加远程仓库
+
+先在GitHub上创建远程仓库。
+
+```bash
+git remote add origin git@github.com:WangRenjie12138/git_study.git
+git push -u origin master
+
+#使用git push 命令，将master分支推送到远程。
+#因为远程库是空的，因此加上了-u参数，git会将本地的master分支内容推送到远程新的master分支，并且将两者关联起来。
+
+#此后可以直接使用
+git push origin master
+```
+
+#### 删除远程库
+
+```bash
+git remote -v     #用于查看远程库信息
+git remote rm origin    #根据名字删除了origin
+
+#此处删除为解除绑定，物理删除的话则需要登录GitHub进行删除
+```
+
+
+
+#### 从远程库克隆下来
+
+```bash
+git clone git@github.com:WangRenjie12138/git_study.git
+```
+
+
+
+
+
+### 分支管理
+
+协作过程中每个人可以创建自己的分支，并提交在自己的分支上。开发完毕后再合并分支，这样既完成了版本控制，又不影响别人工作
+
+#### 创建与合并分支
+
+本质上分支就是不同的指针
+
+```
+#创建分支   -b表示创建并切换
+git checkout -b dev
+
+#git branch查看分支
+git branch
+
+#
+
+```
+
