@@ -309,10 +309,43 @@ git checkout -b dev origin/dev
 
 如果push的时候，别人对分支也做了更改，此时会push失败
 
-```
+```bash
 #首先把最新的提交从origin/dev中拉下来
 git pull
 
+#如果pull失败，则本地分支与远程分支未链接
+$ git branch --set-upstream-to=origin/dev dev
+
+#然后继续pull即可，合并的时候会有冲突，手动解决后commit
 
 ```
 
+
+
+总结：
+
+```bash
+git push origin master
+
+git pull
+
+git branch --set-upsream-to origin/dev dev
+
+git pull
+
+git push origin master
+
+
+```
+
+
+
+### GitHub
+
+![image-20210813115229511](git.assets/image-20210813115229511.png)
+
+```bash
+git clone git@github.com:WangRenjie1218/bootstrap.git	
+```
+
+如果想让别人接收我的修改，在GitHub上发起pull request
