@@ -213,3 +213,61 @@ git branch -d dev
 删除分支  git branch -d <name>
 ```
 
+
+
+#### 解决冲突
+
+当两个分支进行了不同的add commit之后，合并时会引发冲突
+
+比如新建一个feature1分支，在此分支上进行了修改，并add和commit
+
+然后切换回master分支，再修改，并add和commit
+
+之后master分支再merge feature1分支时，便会冲突。
+
+git会将冲突标注在文件中
+
+```
+<<<<<<<<<<<<<<<<<<<<HEAD
+balabala
+=================
+sdasdadsdad
+>>>>>>>>>>>>>>>>>>feature1
+```
+
+将此时的文件修改解决后再add 和 commit 一次就可解决冲突。
+
+
+
+
+
+#### 分支管理策略
+
+一般在合并分支的时候，git会尽量使用fast forward模式。但是此方式中，**删除分支会丢掉分支信息**
+
+如果禁用fast forward模式，则git会在merge的时候生成一个新的commit，在分支历史上就能够看到分支信息
+
+```bash
+git switch -c dev
+
+git add 123.txt
+git commit -m "add merge"
+
+git switch master
+
+#因为--no-ff模式下，合并会创建一个新的commit，所以使用-m将commit描述写进入 
+git merge --no-ff -m "merge with no-ff" dev
+
+git log
+```
+
+![image-20210813100158435](git.assets/image-20210813100158435.png)
+
+##### 分支策略
+
++ master分支应是最稳定的分支（仅仅用来发布新版本，不用于开发）
++ 开发都在dev分支上，当测试完成发布的时候，将dev分支合并到master上。
++ 每个人都有自己的分支，并且不定期在dev分支上合并即可
+
+![image-20210813100346846](git.assets/image-20210813100346846.png)
+
