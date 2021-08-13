@@ -271,3 +271,48 @@ git log
 
 ![image-20210813100346846](git.assets/image-20210813100346846.png)
 
+#### bug分支
+
+
+
+```bash
+git branch -D 分支
+```
+
+
+
+
+
+#### 多人协作
+
+```bash
+git remote    #查看远程仓库信息
+git remote -v #更详细的信息
+```
+
+推送分支
+
+```bash
+git push origin master
+git push origin dev
+```
+
+抓取分支
+
+```bash
+git clone git@github.com:WangRenjie12138/git_study.git
+#clone的时候，默认只能看到本地的master分支
+
+#创建dev分支：
+git checkout -b dev origin/dev
+```
+
+如果push的时候，别人对分支也做了更改，此时会push失败
+
+```
+#首先把最新的提交从origin/dev中拉下来
+git pull
+
+
+```
+
