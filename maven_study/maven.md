@@ -232,4 +232,115 @@ mvn deploye
 
 ## 六、基于 IDEA 的 Maven 使用
 
-6.1 在 IDEA 中关联 Maven
+### 6.1 在 IDEA 中关联 Maven
+
+> 通过 IDEA settings 进行 maven 设置，通过指定 maven home 和 settings.xml 及 Local Repository
+>
+> 如果有的项目有特殊配置需求，则单独设置即可
+
+| maven 配置（通用）                                           |
+| ------------------------------------------------------------ |
+| ![image-20210824141744267](maven.assets/image-20210824141744267.png) |
+| ![image-20210824141822615](maven.assets/image-20210824141822615.png) |
+
+`说明：` IDEA本身集成了 Maven，考虑到 IDEA 和 Maven 版本的兼容性，IDEA不建议配置比默认版本更新的版本，建议使用 IDEA 自带的 Maven（settings 文件和 Repository 自行配置）
+
+
+
+### 6.2 使用 IDEA 创建 Maven 项目
+
+#### 6.2.1 Java 项目
+
+| 创建 Java 项目                                               |
+| ------------------------------------------------------------ |
+| ![image-20210824142657827](maven.assets/image-20210824142657827.png) |
+| ![image-20210824143802620](maven.assets/image-20210824143802620.png) |
+| ![image-20210824144012364](maven.assets/image-20210824144012364.png) |
+
+
+
+`版本后缀:` ==SNAPSHOT== (快照版)   ==RELEASE==（发布/稳定版）
+
+`版本号结构:`
+
++ 第一个数字：大版本
++ 第二个数字：小版本
++ 第三个数字：bug修复量
+
+
+
+#### 6.2.2 web 项目
+
+J2ee 不做相关开发，因此跳过
+
+
+
+### 6.3 在 IDEA 中使用 Maven 进行依赖管理
+
+#### 6.3.1 查找依赖坐标
+
+https://mvnrepository.com/
+
+#### 6.3.2 添加依赖
+
++ 将依赖的坐标配置到项目的 pom.xml 文件 dependencies 标签中
+
+```xml
+<dependencies>
+	<!-- 在此位置配置项目中所需依赖的坐标 GAV -->
+    
+    
+    
+    
+</dependencies>
+```
+
+#### 6.3.3 依赖的生命周期
+
+> 在通过 dependency 添加依赖时，可以通过`scope`标签来配置当前依赖的生命周期
+
++ test 只在项目测试阶段引入依赖，打包时不引入（例如 junit ）
+
+```xml
+<!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+    <scope>test</scope>
+</dependency>
+```
+
++ runtime 只在运行时使用（运行、测试运行）
++ provided 在编译、测试、运行都使用
++ compile 在生命周期所有阶段都使用该 jar 包
+
+
+
+### 6.4 在 IDEA 中使用 Maven 进行项目构建
+
+#### 6.4.1 Maven 项目构建生命周期说明
+
++ clean  清除缓存，删除 target 文件夹
++ validate  校验项目的正确性（项目信息、依赖 是完整的）
++ compile  编译，生成class文件
++ test  测试  运行项目中的单元测试
++ package  打包，将项目编译后的代码打包为发布格式
++ verify  检查，对集成测试的结果进行检查，确保项目的质量的达标的
++ install  安装，打包为war包，并存到本地 maven 仓库中，以便在本地其他项目中引用此项目（聚合工程）
++ deploy  部署，将包安装到私服的仓库，以供其他开发人员共享使用
+
+
+
+#### 6.4.2 IDEA 进行生命周期管理
+
++ 可视化
+
+  ![image-20210824155847722](maven.assets/image-20210824155847722.png)
+
++ 终端指令
+
+  直接打开 IDEA界面下方的 terminal，输入指令即可
+
+  或 选择项目名称 -- 右键 -- Open in Terminal
+
