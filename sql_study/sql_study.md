@@ -452,3 +452,247 @@ world表
 
 #### JOIN 操作
 
+**总结**
+
++ join 多个表：`FROM` `table1 INNER | LEFT | RIGHT  JOIN table2 ON condition INNER | LEFT | RIGHT JOIN table3 ON condition`
++ group by，当 select 中有合计函数的时候，其余参数必须使用drop by。
+
+game 表
+
+| id   | mdate(日期) | stadium(场馆) | team1 | team2 |
+| ---- | ----------- | ------------- | ----- | ----- |
+|      |             |               |       |       |
+
+goal 表  （进球）
+
+| matchid(赛事编号) | teamid(队伍编号) | player(入球球员) | gtime(进球时间) |
+| ----------------- | ---------------- | ---------------- | --------------- |
+|                   |                  |                  |                 |
+
+eteam（欧洲队伍）
+
+| id   | teamname | coach(教练) |
+| ---- | -------- | ----------- |
+|      |          |             |
+
+
+
+1. 列出 赛事编号 *matchid* 和球员名 *player* , 该球员代表德国队 Germany 入球的。要找出德国队球员，要检查:  `teamid = 'GER'`
+
+   ```sql
+   select matchid, player from goal where teamid = 'GER';
+   ```
+
+2. 由以上查询，你可见 Lars Bender's 于赛事 1012 入球。 現在我們想知道此賽事的對賽隊伍是哪一隊。留意在 `goal` 表格中的欄位 `matchid` ，是對應表格 `game` 的欄位 `id`。我們可以在表格 **game** 中找出賽事 1012 的資料。只顯示賽事 1012 的 id, stadium, team1, team2
+
+   ```sql
+   select id, stadium, team1, team2 from game where id = 1012;
+   ```
+
+3. 对于 1 和 2 两个步骤，我们可以使用 JOIN 来同时进行以上两步操作
+
+   ``` sql
+   SELECT * FROM game JOIN goal ON (id = matchid)
+   ```
+
+   使用 join 显示每一个德国入球队员的球员名、队伍吗、场馆和日期
+
+   ```sql
+   select player, teamid, stadium, mdate from goal as gl JOIN game as ge ON ge.id = gl.matchid join eteam as et on et.id = gl.teamid where teamid = 'GER'; 
+   ```
+
+4. 列出球員名字叫 Mario (`player LIKE 'Mario%'`) 有入球的 隊伍 1 team1, 隊伍 2 team2 和 球員名 player
+
+   ```sql
+   select team1, team2, player from goal as gl JOIN game as ge ON ge.id = gl.matchid where gl.player like 'Mario%';
+   ```
+
+5. 列出每場球賽中首 10 分鐘 `gtime<=10` 有入球的球員 `player`, 隊伍 `teamid`, 教練 `coach`, 入球時間 `gtime`
+
+   ```sql
+   select player, teamid, coach, gtime from goal as gl JOIN eteam as et ON gl.teamid = et.id where gtime < 10;
+   ```
+
+6. 列出 'Fernando Santos' 作為隊伍 1 team1 的教練的賽事日期，和隊伍名。
+
+   ```sql
+   select ge.mdate, et.teamname from game as ge join eteam as et on (ge.team1 = et.id) where et.coach = 'Fernando Santos';
+   ```
+
+7. 列出場館 'National Stadium, Warsaw' 的入球球員。
+
+   ```sql
+   select player from game join goal on game.id = goal.matchid where stadium = 'National Stadium, Warsaw';
+   ```
+
+8. 列出全部赛事，射入德国球门的球员名字
+
+   ```sql
+   select DISTINCT player from goal join game on game.id = goal.matchid where (goal.teamid = game.team1 and game.team2 = 'GER') or (goal.teamid = game.team2 and game.team1 = 'GER');
+   ```
+
+9. 列出隊伍名稱 teamname 和該隊入球總數
+
+   ```sql
+   SELECT teamname, count(*) from goal join eteam on goal.teamid = eteam.id group by teamname;
+   ```
+
+10. 列出場館名和在該場館的入球數字。
+
+    ```sql
+    select stadium, count(*) as goalNum from goal join game on goal.matchid = game.id group by stadium;
+    ```
+
+11. 每一場波蘭 'POL' 有參與的賽事中，列出賽事編號 matchid, 日期 date 和入球數字。
+
+    ```sql
+    select ge.id, ge.mdate, count(teamid) from goal as gl join game as ge on gl.matchid = ge.id where ge.team1 = 'POL' or ge.team2 = 'POL' group by ge.id, ge.mdate;
+    ```
+
+12. 每一場德國 'GER' 有參與的賽事中，列出賽事編號 matchid, 日期 date 和德國的入球數字。
+
+    ```sql
+    select game.id, game.mdate, count(game.id) from goal join game on goal.matchid = game.id where goal.teamid = 'GER' group by game.id, game.mdate;
+    ```
+
+#### more JOIN 操作
+
+**总结**
+
+
+
+table
+
+```
+movie電影(id編號, title電影名稱, yr首影年份, director導演, budget製作費, gross票房收入)
+actor演員(id編號, name姓名)
+casting角色(movieid電影編號, actorid演員編號, ord角色次序)
+```
+
+1. 查询 1962 年首映的电影
+
+   ```sql
+   select id, title from movie where yr = 1962;
+   ```
+
+2. 電影大國民 'Citizen Kane' 的首影年份
+
+   ```sql
+   select yr from movie where title =  'Citizen Kane' ;
+   ```
+
+3. 列出全部 Star Trek 星空奇遇記系列的電影，包括 **id**, **title** 和 **yr**(此系統電影都以 Star Trek 為電影名稱的開首)。按年份順序排列
+
+   ```sql
+   select id, title, yr from movie where title like 'Star Trek%' order by yr ASC;
+   ```
+
+4. **id** 是 11768, 11955, 21191 的電影是什麼名稱？
+
+   ```sql
+   select title from movie where id in(11768, 11955, 21191);
+   ```
+
+5. 女演員 'Glenn Close' 的編號 **id** 是什麼？
+
+   ```sql
+   select id from actor where name = 'Glenn Close';
+   ```
+
+6. 電影北非諜影 'Casablanca' 的編號 **id** 是什麼？
+
+   ```sql
+   select id from movie where title = 'Casablanca';
+   ```
+
+7. 列出電影北非諜影 'Casablanca' 的演員名單。
+
+   ```sql
+   select name from actor as a join casting as c on a.id = c.actorid join movie as m on c.movieid = m.id where title =  'Casablanca';
+   ```
+
+8. 顯示電影 'Alien' 的演員清單。
+
+   ```sql
+   select name from actor as a join casting as c on a.id = c.actorid join movie as m on c.movieid = m.id where title =  'Alien';
+   ```
+
+9. 列出演員夏里遜福 'Harrison Ford' 曾演出的電影。
+
+   ```sql
+   select title from actor as a join casting as c on a.id = c.actorid join movie as m on c.movieid = m.id where a.name = 'Harrison Ford';
+   ```
+
+10. 列出演員夏里遜福 'Harrison Ford' 曾演出的電影，但他不是第 1 主角。
+
+    ```sql
+    select title from actor as a join casting as c on a.id = c.actorid join movie as m on c.movieid = m.id where a.name = 'Harrison Ford' and c.ord != 1;
+    ```
+
+11. 列出 1962 年首影的電影及它的第 1 主角。
+
+    ```sql
+    select title, name from actor as a join casting as c on a.id = c.actorid join movie as m on c.movieid = m.id where c.ord = 1 and m.yr = 1962;
+    ```
+
+    
+
+12. **尊・特拉華達 'John Travolta' 最忙是哪一年？ 顯示年份和該年的電影數目。**
+
+    ```sql
+    惊为天人
+    SELECT yr,COUNT(title) FROM
+      movie JOIN casting ON movie.id=movieid
+             JOIN actor ON actorid=actor.id
+    where name='John Travolta'
+    GROUP BY yr
+    HAVING COUNT(title)=(SELECT MAX(c) FROM
+    (SELECT yr,COUNT(title) AS c FROM
+       movie JOIN casting ON movie.id=movieid
+             JOIN actor ON actorid=actor.id
+     where name='John Travolta'
+     GROUP BY yr) AS t
+    )
+    ```
+
+    
+
+13. **列出演員茱莉・安德絲 'Julie Andrews' 曾參與的電影名稱及其第 1 主角。**
+
+    ```sql
+    select m.title, a.name from
+    	actor as a join casting as c on a.id = c.actorid 
+        		join movie as m on c.movieid = m.id
+    where 
+    	c.ord = 1 and
+        m.id in 
+        	(select movieid from casting where actorid in(select id from actor where name = 'Julie Andrews') );
+    ```
+
+    
+
+14. 列出按字母順序，列出哪一演員曾作 30 次第 1 主角。
+
+    ```sql
+    select a.name from
+    	actor as a join casting as c on a.id = c.actorid 
+        		join movie as m on c.movieid = m.id
+    where c.ord = 1
+    group by (a.name)
+    having count(a.name) >= 30
+    order by a.name asc
+    ```
+
+    
+
+15. 列出 1978 年首影的電影名稱及角色數目，按此數目由多至少排列。
+
+    ```sql
+    ```
+
+    
+
+16. 列出曾與演員亞特・葛芬柯 'Art Garfunkel' 合作過的演員姓名
+
+
+
