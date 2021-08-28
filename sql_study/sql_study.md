@@ -559,7 +559,7 @@ eteam（欧洲队伍）
 
 **总结**
 
-
++ join 在复杂查询操作中也被用于嵌套查询的条件，用于执行及其复杂的操作
 
 table
 
@@ -688,11 +688,27 @@ casting角色(movieid電影編號, actorid演員編號, ord角色次序)
 15. 列出 1978 年首影的電影名稱及角色數目，按此數目由多至少排列。
 
     ```sql
+    select title, count(actorid) from
+    	actor as a join casting as c on a.id = c.actorid 
+        		join movie as m on c.movieid = m.id	
+    where yr = 1978 
+    group by title
+    order by count(actorid) desc, title asc
     ```
 
     
 
 16. 列出曾與演員亞特・葛芬柯 'Art Garfunkel' 合作過的演員姓名
 
+    ```sql
+    select name from
+    	actor as a join casting as c on a.id = c.actorid 
+        		join movie as m on c.movieid = m.id	
+    where movieid in
+    	(select movieid 
+         	from actor join casting on actor.id = casting.actorid 
+         	where name = 'Art Garfunkel');
+    ```
 
+    
 
