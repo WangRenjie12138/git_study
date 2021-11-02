@@ -423,6 +423,18 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
 1. 配置拦截器组件即可
 
+   ```java
+   /**
+    * 分页插件
+    */
+   @Bean
+   public PaginationInterceptor paginationInterceptor() {
+       return new PaginationInterceptor();
+   }
+   ```
+
+2. 直接使用分页查询
+
 
 
 
